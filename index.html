@@ -174,11 +174,11 @@ align-items:center;
 }
 
 .row{
-display:flex;
+display:grid;
+grid-template-columns:45px 1fr;
 align-items:center;
 gap:10px;
 width:100%;
-justify-content:center;
 }
 
 .rowLabel{
@@ -190,8 +190,39 @@ font-weight:600;
 .seats{
 display:flex;
 gap:6px;
-width:100%;
-max-width:900px;
+width:auto;
+justify-self:center;
+}
+
+.splitSeats{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:6px;
+width:auto;
+justify-self:center;
+}
+
+.seatHalf{
+display:flex;
+gap:6px;
+flex:0 0 auto;
+min-width:0;
+}
+
+.seatHalf.left{
+justify-content:flex-end;
+}
+
+.seatHalf.right{
+justify-content:flex-start;
+}
+
+.middleAisle{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:6px;
 }
 
 .square{
@@ -396,7 +427,238 @@ const data=[
 {id:"r6s16",row:6,seat:16,name:"Aleca Elena",email:"fetcu.elena25@yahoo.com"},
 {id:"r6s15",row:6,seat:15,name:"Aleca Elena",email:"fetcu.elena25@yahoo.com"},
 {id:"r6s14",row:6,seat:14,name:"BRATAN EVA STEFANIA",email:"greti_marius@yahoo.com"},
-{id:"r6s13",row:6,seat:13,name:"BRATAN EVA STEFANIA",email:"greti_marius@yahoo.com"}
+{id:"r6s13",row:6,seat:13,name:"BRATAN EVA STEFANIA",email:"greti_marius@yahoo.com"},
+{id:"r6s12",row:6,seat:12,name:"",email:""},
+{id:"r6s11",row:6,seat:11,name:"",email:""},
+{id:"r6s10",row:6,seat:10,name:"",email:""},
+{id:"r6s9",row:6,seat:9,name:"",email:""},
+{id:"r6s8",row:6,seat:8,name:"",email:""},
+{id:"r6s7",row:6,seat:7,name:"",email:""},
+{id:"r6s6",row:6,seat:6,name:"",email:""},
+{id:"r6s5",row:6,seat:5,name:"",email:""},
+{id:"r6s4",row:6,seat:4,name:"",email:""},
+{id:"r6s3",row:6,seat:3,name:"",email:""},
+{id:"r6s2",row:6,seat:2,name:"",email:""},
+{id:"r6s1",row:6,seat:1,name:"",email:""},
+{id:"r7s1",row:7,seat:1,name:"",email:""},
+{id:"r7s2",row:7,seat:2,name:"",email:""},
+{id:"r7s3",row:7,seat:3,name:"",email:""},
+{id:"r7s4",row:7,seat:4,name:"",email:""},
+{id:"r7s5",row:7,seat:5,name:"",email:""},
+{id:"r7s6",row:7,seat:6,name:"",email:""},
+{id:"r7s7",row:7,seat:7,name:"",email:""},
+{id:"r7s8",row:7,seat:8,name:"",email:""},
+{id:"r7s9",row:7,seat:9,name:"",email:""},
+{id:"r7s10",row:7,seat:10,name:"",email:""},
+{id:"r7s11",row:7,seat:11,name:"",email:""},
+{id:"r7s12",row:7,seat:12,name:"",email:""},
+{id:"r7s13",row:7,seat:13,name:"",email:""},
+{id:"r7s14",row:7,seat:14,name:"",email:""},
+{id:"r7s15",row:7,seat:15,name:"",email:""},
+{id:"r7s16",row:7,seat:16,name:"",email:""},
+{id:"r7s17",row:7,seat:17,name:"",email:""},
+{id:"r7s18",row:7,seat:18,name:"",email:""},
+{id:"r7s19",row:7,seat:19,name:"",email:""},
+{id:"r7s20",row:7,seat:20,name:"",email:""},
+{id:"r7s21",row:7,seat:21,name:"",email:""},
+{id:"r7s22",row:7,seat:22,name:"",email:""},
+{id:"r7s23",row:7,seat:23,name:"",email:""},
+{id:"r8s23",row:8,seat:23,name:"",email:""},
+{id:"r8s22",row:8,seat:22,name:"",email:""},
+{id:"r8s21",row:8,seat:21,name:"",email:""},
+{id:"r8s20",row:8,seat:20,name:"",email:""},
+{id:"r8s19",row:8,seat:19,name:"",email:""},
+{id:"r8s18",row:8,seat:18,name:"",email:""},
+{id:"r8s17",row:8,seat:17,name:"",email:""},
+{id:"r8s16",row:8,seat:16,name:"",email:""},
+{id:"r8s15",row:8,seat:15,name:"",email:""},
+{id:"r8s14",row:8,seat:14,name:"",email:""},
+{id:"r8s13",row:8,seat:13,name:"",email:""},
+{id:"r8s12",row:8,seat:12,name:"",email:""},
+{id:"r8s11",row:8,seat:11,name:"",email:""},
+{id:"r8s10",row:8,seat:10,name:"",email:""},
+{id:"r8s9",row:8,seat:9,name:"",email:""},
+{id:"r8s8",row:8,seat:8,name:"",email:""},
+{id:"r8s7",row:8,seat:7,name:"",email:""},
+{id:"r8s6",row:8,seat:6,name:"",email:""},
+{id:"r8s5",row:8,seat:5,name:"",email:""},
+{id:"r8s4",row:8,seat:4,name:"",email:""},
+{id:"r8s3",row:8,seat:3,name:"",email:""},
+{id:"r8s2",row:8,seat:2,name:"",email:""},
+{id:"r8s1",row:8,seat:1,name:"",email:""},
+{id:"r9s1",row:9,seat:1,name:"",email:""},
+{id:"r9s2",row:9,seat:2,name:"",email:""},
+{id:"r9s3",row:9,seat:3,name:"",email:""},
+{id:"r9s4",row:9,seat:4,name:"",email:""},
+{id:"r9s5",row:9,seat:5,name:"",email:""},
+{id:"r9s6",row:9,seat:6,name:"",email:""},
+{id:"r9s7",row:9,seat:7,name:"",email:""},
+{id:"r9s8",row:9,seat:8,name:"",email:""},
+{id:"r9s9",row:9,seat:9,name:"",email:""},
+{id:"r9s10",row:9,seat:10,name:"",email:""},
+{id:"r9s11",row:9,seat:11,name:"",email:""},
+{id:"r9s12",row:9,seat:12,name:"",email:""},
+{id:"r9s13",row:9,seat:13,name:"",email:""},
+{id:"r9s14",row:9,seat:14,name:"",email:""},
+{id:"r9s15",row:9,seat:15,name:"",email:""},
+{id:"r9s16",row:9,seat:16,name:"",email:""},
+{id:"r9s17",row:9,seat:17,name:"",email:""},
+{id:"r9s18",row:9,seat:18,name:"",email:""},
+{id:"r9s19",row:9,seat:19,name:"",email:""},
+{id:"r9s20",row:9,seat:20,name:"",email:""},
+{id:"r9s21",row:9,seat:21,name:"",email:""},
+{id:"r9s22",row:9,seat:22,name:"",email:""},
+{id:"r9s23",row:9,seat:23,name:"",email:""},
+{id:"r10s23",row:10,seat:23,name:"",email:""},
+{id:"r10s22",row:10,seat:22,name:"",email:""},
+{id:"r10s21",row:10,seat:21,name:"",email:""},
+{id:"r10s20",row:10,seat:20,name:"",email:""},
+{id:"r10s19",row:10,seat:19,name:"",email:""},
+{id:"r10s18",row:10,seat:18,name:"",email:""},
+{id:"r10s17",row:10,seat:17,name:"",email:""},
+{id:"r10s16",row:10,seat:16,name:"",email:""},
+{id:"r10s15",row:10,seat:15,name:"",email:""},
+{id:"r10s14",row:10,seat:14,name:"",email:""},
+{id:"r10s13",row:10,seat:13,name:"",email:""},
+{id:"r10s12",row:10,seat:12,name:"",email:""},
+{id:"r10s11",row:10,seat:11,name:"",email:""},
+{id:"r10s10",row:10,seat:10,name:"",email:""},
+{id:"r10s9",row:10,seat:9,name:"",email:""},
+{id:"r10s8",row:10,seat:8,name:"",email:""},
+{id:"r10s7",row:10,seat:7,name:"",email:""},
+{id:"r10s6",row:10,seat:6,name:"",email:""},
+{id:"r10s5",row:10,seat:5,name:"",email:""},
+{id:"r10s4",row:10,seat:4,name:"",email:""},
+{id:"r10s3",row:10,seat:3,name:"",email:""},
+{id:"r10s2",row:10,seat:2,name:"",email:""},
+{id:"r10s1",row:10,seat:1,name:"",email:""},
+{id:"r11s1",row:11,seat:1,name:"",email:""},
+{id:"r11s2",row:11,seat:2,name:"",email:""},
+{id:"r11s3",row:11,seat:3,name:"",email:""},
+{id:"r11s4",row:11,seat:4,name:"",email:""},
+{id:"r11s5",row:11,seat:5,name:"",email:""},
+{id:"r11s6",row:11,seat:6,name:"",email:""},
+{id:"r11s7",row:11,seat:7,name:"",email:""},
+{id:"r11s8",row:11,seat:8,name:"",email:""},
+{id:"r11s9",row:11,seat:9,name:"",email:""},
+{id:"r11s10",row:11,seat:10,name:"",email:""},
+{id:"r11s11",row:11,seat:11,name:"",email:""},
+{id:"r11s12",row:11,seat:12,name:"",email:""},
+{id:"r11s13",row:11,seat:13,name:"",email:""},
+{id:"r11s14",row:11,seat:14,name:"",email:""},
+{id:"r11s15",row:11,seat:15,name:"",email:""},
+{id:"r11s16",row:11,seat:16,name:"",email:""},
+{id:"r11s17",row:11,seat:17,name:"",email:""},
+{id:"r11s18",row:11,seat:18,name:"",email:""},
+{id:"r11s19",row:11,seat:19,name:"",email:""},
+{id:"r11s20",row:11,seat:20,name:"",email:""},
+{id:"r11s21",row:11,seat:21,name:"",email:""},
+{id:"r11s22",row:11,seat:22,name:"",email:""},
+{id:"r11s23",row:11,seat:23,name:"",email:""},
+{id:"r12s23",row:12,seat:23,name:"",email:""},
+{id:"r12s22",row:12,seat:22,name:"",email:""},
+{id:"r12s21",row:12,seat:21,name:"",email:""},
+{id:"r12s20",row:12,seat:20,name:"",email:""},
+{id:"r12s19",row:12,seat:19,name:"",email:""},
+{id:"r12s18",row:12,seat:18,name:"",email:""},
+{id:"r12s17",row:12,seat:17,name:"",email:""},
+{id:"r12s16",row:12,seat:16,name:"",email:""},
+{id:"r12s15",row:12,seat:15,name:"",email:""},
+{id:"r12s14",row:12,seat:14,name:"",email:""},
+{id:"r12s13",row:12,seat:13,name:"",email:""},
+{id:"r12s12",row:12,seat:12,name:"",email:""},
+{id:"r12s11",row:12,seat:11,name:"",email:""},
+{id:"r12s10",row:12,seat:10,name:"",email:""},
+{id:"r12s9",row:12,seat:9,name:"",email:""},
+{id:"r12s8",row:12,seat:8,name:"",email:""},
+{id:"r12s7",row:12,seat:7,name:"",email:""},
+{id:"r12s6",row:12,seat:6,name:"",email:""},
+{id:"r12s5",row:12,seat:5,name:"",email:""},
+{id:"r12s4",row:12,seat:4,name:"",email:""},
+{id:"r12s3",row:12,seat:3,name:"",email:""},
+{id:"r12s2",row:12,seat:2,name:"",email:""},
+{id:"r12s1",row:12,seat:1,name:"",email:""},
+{id:"r13s1",row:13,seat:1,name:"",email:""},
+{id:"r13s2",row:13,seat:2,name:"",email:""},
+{id:"r13s3",row:13,seat:3,name:"",email:""},
+{id:"r13s4",row:13,seat:4,name:"",email:""},
+{id:"r13s5",row:13,seat:5,name:"",email:""},
+{id:"r13s6",row:13,seat:6,name:"",email:""},
+{id:"r13s7",row:13,seat:7,name:"",email:""},
+{id:"r13s8",row:13,seat:8,name:"",email:""},
+{id:"r13s9",row:13,seat:9,name:"",email:""},
+{id:"r13s10",row:13,seat:10,name:"",email:""},
+{id:"r13s11",row:13,seat:11,name:"",email:""},
+{id:"r13s12",row:13,seat:12,name:"",email:""},
+{id:"r13s13",row:13,seat:13,name:"",email:""},
+{id:"r13s14",row:13,seat:14,name:"",email:""},
+{id:"r13s15",row:13,seat:15,name:"",email:""},
+{id:"r13s16",row:13,seat:16,name:"",email:""},
+{id:"r13s17",row:13,seat:17,name:"",email:""},
+{id:"r13s18",row:13,seat:18,name:"",email:""},
+{id:"r13s19",row:13,seat:19,name:"",email:""},
+{id:"r13s20",row:13,seat:20,name:"",email:""},
+{id:"r13s21",row:13,seat:21,name:"",email:""},
+{id:"r13s22",row:13,seat:22,name:"",email:""},
+{id:"r13s23",row:13,seat:23,name:"",email:""},
+{id:"r14s21",row:14,seat:21,name:"",email:""},
+{id:"r14s20",row:14,seat:20,name:"",email:""},
+{id:"r14s19",row:14,seat:19,name:"",email:""},
+{id:"r14s18",row:14,seat:18,name:"",email:""},
+{id:"r14s17",row:14,seat:17,name:"",email:""},
+{id:"r14s16",row:14,seat:16,name:"",email:""},
+{id:"r14s15",row:14,seat:15,name:"",email:""},
+{id:"r14s14",row:14,seat:14,name:"",email:""},
+{id:"r14s13",row:14,seat:13,name:"",email:""},
+{id:"r14s12",row:14,seat:12,name:"",email:""},
+{id:"r14s11",row:14,seat:11,name:"",email:""},
+{id:"r14s10",row:14,seat:10,name:"",email:""},
+{id:"r14s9",row:14,seat:9,name:"",email:""},
+{id:"r14s8",row:14,seat:8,name:"",email:""},
+{id:"r14s7",row:14,seat:7,name:"",email:""},
+{id:"r14s6",row:14,seat:6,name:"",email:""},
+{id:"r14s5",row:14,seat:5,name:"",email:""},
+{id:"r14s4",row:14,seat:4,name:"",email:""},
+{id:"r14s3",row:14,seat:3,name:"",email:""},
+{id:"r14s2",row:14,seat:2,name:"",email:""},
+{id:"r14s1",row:14,seat:1,name:"",email:""},
+{id:"r15s1",row:15,seat:1,name:"",email:""},
+{id:"r15s2",row:15,seat:2,name:"",email:""},
+{id:"r15s3",row:15,seat:3,name:"",email:""},
+{id:"r15s4",row:15,seat:4,name:"",email:""},
+{id:"r15s5",row:15,seat:5,name:"",email:""},
+{id:"r15s6",row:15,seat:6,name:"",email:""},
+{id:"r15s7",row:15,seat:7,name:"",email:""},
+{id:"r15s8",row:15,seat:8,name:"",email:""},
+{id:"r15s9",row:15,seat:9,name:"",email:""},
+{id:"r15s10",row:15,seat:10,name:"",email:""},
+{id:"r15s11",row:15,seat:11,name:"",email:""},
+{id:"r15s12",row:15,seat:12,name:"",email:""},
+{id:"r15s13",row:15,seat:13,name:"",email:""},
+{id:"r15s14",row:15,seat:14,name:"",email:""},
+{id:"r15s15",row:15,seat:15,name:"",email:""},
+{id:"r15s16",row:15,seat:16,name:"",email:""},
+{id:"r15s17",row:15,seat:17,name:"",email:""},
+{id:"r15s18",row:15,seat:18,name:"",email:""},
+{id:"r15s19",row:15,seat:19,name:"",email:""},
+{id:"r16s18",row:16,seat:18,name:"",email:""},
+{id:"r16s17",row:16,seat:17,name:"",email:""},
+{id:"r16s16",row:16,seat:16,name:"",email:""},
+{id:"r16s15",row:16,seat:15,name:"",email:""},
+{id:"r16s14",row:16,seat:14,name:"",email:""},
+{id:"r16s13",row:16,seat:13,name:"",email:""},
+{id:"r16s12",row:16,seat:12,name:"",email:""},
+{id:"r16s11",row:16,seat:11,name:"",email:""},
+{id:"r16s10",row:16,seat:10,name:"",email:""},
+{id:"r16s9",row:16,seat:9,name:"",email:""},
+{id:"r16s8",row:16,seat:8,name:"",email:""},
+{id:"r16s7",row:16,seat:7,name:"",email:""},
+{id:"r16s6",row:16,seat:6,name:"",email:""},
+{id:"r16s5",row:16,seat:5,name:"",email:""},
+{id:"r16s4",row:16,seat:4,name:"",email:""},
+{id:"r16s3",row:16,seat:3,name:"",email:""},
+{id:"r16s2",row:16,seat:2,name:"",email:""},
+{id:"r16s1",row:16,seat:1,name:"",email:""},
 ]
 
 const search=document.getElementById("search")
@@ -407,7 +669,7 @@ const wrapper=document.querySelector(".inputWrapper")
 const pinkPage=document.getElementById("pinkPage")
 const seatMap=document.getElementById("seatMap")
 
-const searchableData=data.filter(d=>d.row!==1)
+const searchableData=data.filter(d=>d.row!==1 && d.name.trim()!=="")
 
 const participants=[...new Set(searchableData.map(d=>`${d.name}|||${(d.email||"").toLowerCase()}`))]
   .map(entry=>{
@@ -444,34 +706,68 @@ rows.forEach(r=>{
 let rowDiv=document.createElement("div")
 rowDiv.className="row"
 
+let seats=data
+  .filter(d=>d.row===r)
+  .sort((a,b)=>a.seat-b.seat)
+
+const buildSeatBox=(seat)=>{
+  let sq=document.createElement("div")
+  sq.className="square"
+  sq.style.width=seatSize+"px"
+  if(activeSeats.includes(seat.id)){
+    sq.classList.add("active")
+    sq.textContent=seat.seat
+  }
+  return sq
+}
+
+if(r>=6 && r<=14){
+
 let label=document.createElement("div")
 label.className="rowLabel"
 label.textContent="R"+r
+rowDiv.appendChild(label)
 
+let splitContainer=document.createElement("div")
+splitContainer.className="splitSeats"
+
+let left=document.createElement("div")
+left.className="seatHalf left"
+
+let right=document.createElement("div")
+right.className="seatHalf right"
+
+let middleAisle=document.createElement("div")
+middleAisle.className="middleAisle"
+
+middleAisle.style.width="52px"
+
+let leftCount=Math.floor(seats.length/2)
+seats.slice(0,leftCount).forEach(s=>left.appendChild(buildSeatBox(s)))
+seats.slice(leftCount).forEach(s=>right.appendChild(buildSeatBox(s)))
+
+splitContainer.appendChild(left)
+splitContainer.appendChild(middleAisle)
+splitContainer.appendChild(right)
+
+rowDiv.appendChild(splitContainer)
+seatMap.appendChild(rowDiv)
+  return
+}
+
+if(r===15){
+  rowDiv.style.marginTop="32px"
+}
+
+let label=document.createElement("div")
+label.className="rowLabel"
+label.textContent="R"+r
 rowDiv.appendChild(label)
 
 let seatsContainer=document.createElement("div")
 seatsContainer.className="seats"
 
-let seats=data
-  .filter(d=>d.row===r)
-  .sort((a,b)=>a.seat-b.seat)
-
-seats.forEach(s=>{
-
-let sq=document.createElement("div")
-sq.className="square"
-
-sq.style.width=seatSize+"px"
-
-if(activeSeats.includes(s.id)){
-sq.classList.add("active")
-sq.textContent=s.seat
-}
-
-seatsContainer.appendChild(sq)
-
-})
+seats.forEach(s=>seatsContainer.appendChild(buildSeatBox(s)))
 
 rowDiv.appendChild(seatsContainer)
 seatMap.appendChild(rowDiv)
