@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Căutare locuri</title>
+
+<style>
+
+body{
+font-family:system-ui;
+background:url("background.png") top center no-repeat;
+background-size:cover;
+min-height:100vh;
+margin:0;
+color:white;
+overflow-x:hidden;
+}
+
+/* SEARCH */
+
+.searchWrapper{
+position:fixed;
+top:85%;
+left:50%;
+transform:translate(-50%,-50%);
+width:80%;
+display:flex;
+justify-content:center;
+z-index:10;
+}
+
+.searchBox{
+position:relative;
+width:500px;
+max-width:500px;
+}
+
+.inputWrapper{
+position:relative;
+width:100%;
+}
+
+input{
+width:100%;
+padding:18px;
+border-radius:14px;
+border:none;
+font-size:18px;
+outline:none;
+box-shadow:0 15px 40px rgba(0,0,0,.4);
+}
+
+#clearBtn{
+position:absolute;
+right:-15px;
+top:50%;
+transform:translateY(-50%);
+font-size:20px;
+cursor:pointer;
+color:#555;
+opacity:0;
+transition:opacity .2s;
+font-weight:700;
+}
+
+.inputWrapper.active #clearBtn{
+opacity:.6;
+}
+
+.results{
+position:absolute;
+bottom:120%;
+width:105%;
+background:#F9FFFC;
+color:black;
+border-radius:12px;
+overflow:hidden;
+max-height:260px;
+overflow-y:auto;
+box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.resultItem{
+padding:14px;
+cursor:pointer;
+}
+
+.resultItem:hover{
+background:#eee;
+}
+
+.output{
+display:none;
+position:fixed;
+bottom:25%;
+left:0;
+right:0;
+margin:auto;
+width:80vw;
+max-width:900px;
+text-align:center;
+padding:35px;
+background:rgba(30,60,90,.55);
+border-radius:20px;
+backdrop-filter:blur(8px);
+font-size:20px;
+}
+
+.seat{
+display:inline-block;
+padding:10px 16px;
+margin:8px;
+border-radius:10px;
+background:rgba(255,255,255,.2);
+}
+
+/* PINK PAGE */
+
+#pinkPage{
+position:fixed;
+top:0;
+left:0;
+width:100vw;
+height:100vh;
+background:#173765;
+transform:translateX(100%);
+transition:transform .45s cubic-bezier(.4,0,.2,1);
+z-index:50;
+display:flex;
+flex-direction:column;
+overflow-y:auto;
+}
+
+#pinkPage.active{
+transform:translateX(0);
+}
+
+/* STAGE */
+
+#scene{
+width:100%;
+display:flex;
+justify-content:center;
+padding-top:0px;
+margin-bottom:25px;
+}
+
+.stage{
+width:80%;
+max-width:500px;
+height:60px;
+background:white;
+color:black;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:0 0 40px 40px;
+font-weight:700;
+box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+
+/* SEAT MAP */
+
+#seatMap{
+width:100%;
+display:flex;
+flex-direction:column;
+gap:16px;
+padding:10px;
+box-sizing:border-box;
+align-items:center;
+}
+
+.row{
+display:flex;
+align-items:center;
+gap:10px;
+width:100%;
+justify-content:center;
+}
+
+.rowLabel{
+width:45px;
+text-align:right;
+font-weight:600;
+}
+
+.seats{
+display:flex;
+gap:6px;
+width:100%;
+max-width:900px;
+}
+
+.square{
+display:flex;
+align-items:center;
+justify-content:center;
+background:white;
+opacity:.25;
+border-radius:6px;
+font-weight:600;
+color:black;
+aspect-ratio:1/1;
+}
+
+.square.active{
+background:#DBEAF2;
+opacity:1;
+box-shadow:0 0 10px rgba(0,255,213,.7);
+}
+
+/* MOBILE */
+
+@media(max-width:786px){
+
+.searchBox{
+width:80%;
+}
+
+.output{
+width:80%;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="searchWrapper">
+<div class="searchBox">
+
+<div class="inputWrapper">
+<input id="search" placeholder="Scrie numele sau emailul...">
+<span id="clearBtn">✕</span>
+</div>
+
+<div id="results" class="results"></div>
+
+</div>
+</div>
+
+<div id="output" class="output"></div>
+
+<div id="pinkPage">
+
+<div id="scene">
+<div class="stage">Scena Teatrul Colibri</div>
+</div>
+
+<div id="seatMap"></div>
+
+</div>
+
+<script>
+
+const data=[
+{id:"r1s1",row:1,seat:1,name:"Adrian Stanulica",email:""},
+{id:"r1s2",row:1,seat:2,name:"Adrian Stanulica",email:""},
+{id:"r1s3",row:1,seat:3,name:"Radu",email:""},
+{id:"r1s4",row:1,seat:4,name:"Radu",email:""},
+{id:"r1s5",row:1,seat:5,name:"Radu",email:""},
+{id:"r1s6",row:1,seat:6,name:"Radu",email:""},
+{id:"r1s7",row:1,seat:7,name:"Radu",email:""},
+{id:"r1s8",row:1,seat:8,name:"Radu",email:""},
+{id:"r1s9",row:1,seat:9,name:"Radu",email:""},
+{id:"r1s10",row:1,seat:10,name:"Radu",email:""},
+{id:"r1s11",row:1,seat:11,name:"Radu",email:""},
+{id:"r1s12",row:1,seat:12,name:"Radu",email:""},
+{id:"r1s13",row:1,seat:13,name:"Radu",email:""},
+{id:"r1s14",row:1,seat:14,name:"Radu",email:""},
+{id:"r1s15",row:1,seat:15,name:"Radu",email:""},
+{id:"r1s16",row:1,seat:16,name:"Radu",email:""},
+{id:"r1s17",row:1,seat:17,name:"Radu",email:""},
+{id:"r1s18",row:1,seat:18,name:"Radu",email:""},
+{id:"r1s19",row:1,seat:19,name:"Radu",email:""},
+{id:"r1s20",row:1,seat:20,name:"Radu",email:""},
+{id:"r1s21",row:1,seat:21,name:"Radu",email:""},
+{id:"r1s22",row:1,seat:22,name:"Radu",email:""},
+{id:"r1s23",row:1,seat:23,name:"Radu",email:""},
+{id:"r1s24",row:1,seat:24,name:"Radu",email:""},
+{id:"r1s25",row:1,seat:25,name:"Radu",email:""},
+{id:"r2s26",row:2,seat:26,name:"Radu Larisa",email:"lar_isa83@yahoo.com"},
+{id:"r2s25",row:2,seat:25,name:"Radu Larisa",email:"lar_isa83@yahoo.com"},
+{id:"r2s24",row:2,seat:24,name:"Radu Larisa",email:"lar_isa83@yahoo.com"},
+{id:"r2s23",row:2,seat:23,name:"Radu Larisa",email:"lar_isa83@yahoo.com"},
+{id:"r2s22",row:2,seat:22,name:"Bralostitianu Corina",email:"smartschoolconcept@yahoo.com"},
+{id:"r2s21",row:2,seat:21,name:"Bralostitianu Corina",email:"smartschoolconcept@yahoo.com"},
+{id:"r2s20",row:2,seat:20,name:"Bralostitianu Corina",email:"smartschoolconcept@yahoo.com"},
+{id:"r2s19",row:2,seat:19,name:"Bralostitianu Corina",email:"smartschoolconcept@yahoo.com"},
+{id:"r2s18",row:2,seat:18,name:"Bralostitianu Corina",email:"smartschoolconcept@yahoo.com"},
+{id:"r2s17",row:2,seat:17,name:"Stanusi Andreea",email:"andreeacazan22@yahoo.com"},
+{id:"r2s16",row:2,seat:16,name:"Stanusi Andreea",email:"andreeacazan22@yahoo.com"},
+{id:"r2s15",row:2,seat:15,name:"Daria Badea",email:"dariasilvanabadea@gmail.com"},
+{id:"r2s14",row:2,seat:14,name:"Daria Badea",email:"dariasilvanabadea@gmail.com"},
+{id:"r2s13",row:2,seat:13,name:"Daria Badea",email:"dariasilvanabadea@gmail.com"},
+{id:"r2s12",row:2,seat:12,name:"Daria Badea",email:"dariasilvanabadea@gmail.com"},
+{id:"r2s11",row:2,seat:11,name:"Deaconu Andrei",email:"georgiana.tutza@gmail.com"},
+{id:"r2s10",row:2,seat:10,name:"Deaconu Andrei",email:"georgiana.tutza@gmail.com"},
+{id:"r2s9",row:2,seat:9,name:"Bralostitianu Mihai",email:"mihai_bralo@yahoo.ro"},
+{id:"r2s8",row:2,seat:8,name:"Bralostitianu Mihai",email:"mihai_bralo@yahoo.ro"},
+{id:"r2s7",row:2,seat:7,name:"Bralostitianu Mihai",email:"mihai_bralo@yahoo.ro"},
+{id:"r2s6",row:2,seat:6,name:"Preda Corina",email:"Corina_ise@yahoo.com"},
+{id:"r2s5",row:2,seat:5,name:"Preda Corina",email:"Corina_ise@yahoo.com"},
+{id:"r2s4",row:2,seat:4,name:"Preda Corina",email:"Corina_ise@yahoo.com"},
+{id:"r2s3",row:2,seat:3,name:"Cristina Serban",email:"cristiana.tranca@gmail.com"},
+{id:"r2s2",row:2,seat:2,name:"Cristina Serban",email:"cristiana.tranca@gmail.com"},
+{id:"r2s1",row:2,seat:1,name:"Cristina Serban",email:"cristiana.tranca@gmail.com"},
+{id:"r3s1",row:3,seat:1,name:"Cristina Serban",email:"cristiana.tranca@gmail.com"},
+{id:"r3s2",row:3,seat:2,name:"Cristina Serban",email:"cristiana.tranca@gmail.com"},
+{id:"r3s3",row:3,seat:3,name:"Silviu Lungu",email:"silviu.lungu2012@gmail.com"},
+{id:"r3s4",row:3,seat:4,name:"Silviu Lungu",email:"silviu.lungu2012@gmail.com"},
+{id:"r3s5",row:3,seat:5,name:"Silviu Lungu",email:"silviu.lungu2012@gmail.com"},
+{id:"r3s6",row:3,seat:6,name:"Boboc Georgiana",email:"bobocgeorgiana30@gmail.com"},
+{id:"r3s7",row:3,seat:7,name:"Boboc Georgiana",email:"bobocgeorgiana30@gmail.com"},
+{id:"r3s8",row:3,seat:8,name:"Boboc Georgiana",email:"bobocgeorgiana30@gmail.com"},
+{id:"r3s9",row:3,seat:9,name:"Cranga Alexandru",email:"c_alexandru2002@yahoo.com"},
+{id:"r3s10",row:3,seat:10,name:"Cranga Alexandru",email:"c_alexandru2002@yahoo.com"},
+{id:"r3s11",row:3,seat:11,name:"Cranga Alexandru",email:"c_alexandru2002@yahoo.com"},
+{id:"r3s12",row:3,seat:12,name:"Casota Claudia",email:"clausramona@yahoo.com"},
+{id:"r3s13",row:3,seat:13,name:"Casota Claudia",email:"clausramona@yahoo.com"},
+{id:"r3s14",row:3,seat:14,name:"Neagoe adelina",email:"adelina.ghencioiu@gmail.com"},
+{id:"r3s15",row:3,seat:15,name:"Neagoe adelina",email:"adelina.ghencioiu@gmail.com"},
+{id:"r3s16",row:3,seat:16,name:"Neagoe adelina",email:"adelina.ghencioiu@gmail.com"},
+{id:"r3s17",row:3,seat:17,name:"Vitorino Gabriel Lucca",email:"vitorino.mirela@gmail.com"},
+{id:"r3s18",row:3,seat:18,name:"Vitorino Gabriel Lucca",email:"vitorino.mirela@gmail.com"},
+{id:"r3s19",row:3,seat:19,name:"Curteanu Eliana",email:"prunescueliana@gmail.com"},
+{id:"r3s20",row:3,seat:20,name:"Curteanu Eliana",email:"prunescueliana@gmail.com"},
+{id:"r3s21",row:3,seat:21,name:"Stancu Mirela",email:"stancumirela_2@yahoo.com"},
+{id:"r3s22",row:3,seat:22,name:"Stancu Mirela",email:"stancumirela_2@yahoo.com"},
+{id:"r3s23",row:3,seat:23,name:"Stancu Mirela",email:"stancumirela_2@yahoo.com"},
+{id:"r3s24",row:3,seat:24,name:"Stancu Mirela",email:"stancumirela_2@yahoo.com"},
+{id:"r3s25",row:3,seat:25,name:"Stancu Mirela",email:"stancumirela_2@yahoo.com"},
+{id:"r4s26",row:4,seat:26,name:"Stancu Mirela",email:"stancumirela_2@yahoo.com"},
+{id:"r4s25",row:4,seat:25,name:"Iordache Florentina",email:"iordache.ionela.florentina@gmail.com"},
+{id:"r4s24",row:4,seat:24,name:"Iordache Florentina",email:"iordache.ionela.florentina@gmail.com"},
+{id:"r4s23",row:4,seat:23,name:"Badescu Alina",email:"allynna_001@yahoo.com"},
+{id:"r4s22",row:4,seat:22,name:"Badescu Alina",email:"allynna_001@yahoo.com"},
+{id:"r4s21",row:4,seat:21,name:"Iordache Ionela Florentina",email:"dragosiordache2003@yahoo.com"},
+{id:"r4s20",row:4,seat:20,name:"Iordache Ionela Florentina",email:"dragosiordache2003@yahoo.com"},
+{id:"r4s19",row:4,seat:19,name:"Nicola Raluca",email:"ralucanicolasf@gmail.com"},
+{id:"r4s18",row:4,seat:18,name:"Nicola Raluca",email:"ralucanicolasf@gmail.com"},
+{id:"r4s17",row:4,seat:17,name:"Lelia Gheorghita",email:"leliagheorghita@yahoo.com"},
+{id:"r4s16",row:4,seat:16,name:"Raluca Nicola",email:"ralucanicolasf@gmail.com"},
+{id:"r4s15",row:4,seat:15,name:"Lelia Gheorghita",email:"leliagheorghita@yahoo.com"},
+{id:"r4s14",row:4,seat:14,name:"Iancu Oana",email:"oana_ndn@yahoo.com"},
+{id:"r4s13",row:4,seat:13,name:"Iancu Oana",email:"oana_ndn@yahoo.com"},
+{id:"r4s12",row:4,seat:12,name:"Iancu Oana",email:"oana_ndn@yahoo.com"},
+{id:"r4s11",row:4,seat:11,name:"Iancu Oana",email:"oana_ndn@yahoo.com"},
+{id:"r4s10",row:4,seat:10,name:"Iancu Oana",email:"oana_ndn@yahoo.com"},
+{id:"r4s9",row:4,seat:9,name:"Tudor Camelia",email:"camelia.florinela86@gmail.com"},
+{id:"r4s8",row:4,seat:8,name:"Tudor Camelia",email:"camelia.florinela86@gmail.com"},
+{id:"r4s7",row:4,seat:7,name:"Tudor Camelia",email:"camelia.florinela86@gmail.com"},
+{id:"r4s6",row:4,seat:6,name:"Tîrziu Giorgiana",email:"giorgianatirziu28@gmail.com"},
+{id:"r4s5",row:4,seat:5,name:"Tîrziu Giorgiana",email:"giorgianatirziu28@gmail.com"},
+{id:"r4s4",row:4,seat:4,name:"Niculescu Beatrice",email:"alexaandramaria1914@gmail.com"},
+{id:"r4s3",row:4,seat:3,name:"Niculescu Beatrice",email:"alexaandramaria1914@gmail.com"},
+{id:"r4s2",row:4,seat:2,name:"Țecu Adriana",email:"adriana_tecu@yahoo.com"},
+{id:"r4s1",row:4,seat:1,name:"Țecu Adriana",email:"adriana_tecu@yahoo.com"},
+{id:"r5s1",row:5,seat:1,name:"Căpreanu Elisabeta",email:"elisabrat@gmail.com"},
+{id:"r5s2",row:5,seat:2,name:"Căpreanu Elisabeta",email:"elisabrat@gmail.com"},
+{id:"r5s3",row:5,seat:3,name:"Patrulescu Denisa",email:"denisa.badeanu@gmail.com"},
+{id:"r5s4",row:5,seat:4,name:"Patrulescu Denisa",email:"denisa.badeanu@gmail.com"},
+{id:"r5s5",row:5,seat:5,name:"Budica Aurelian",email:"budica_aurelian@yahoo.com"},
+{id:"r5s6",row:5,seat:6,name:"Budica Aurelian",email:"budica_aurelian@yahoo.com"},
+{id:"r5s7",row:5,seat:7,name:"Ilie Ramona",email:"ramonapetronela.ilie@gmail.com"},
+{id:"r5s8",row:5,seat:8,name:"Ilie Ramona",email:"ramonapetronela.ilie@gmail.com"},
+{id:"r5s9",row:5,seat:9,name:"Ilie Ramona",email:"ramonapetronela.ilie@gmail.com"},
+{id:"r5s10",row:5,seat:10,name:"Coamesu Ionela Cristina",email:"coamesuionelacristina@gmai.com"},
+{id:"r5s11",row:5,seat:11,name:"Coamesu Ionela Cristina",email:"coamesuionelacristina@gmai.com"},
+{id:"r5s12",row:5,seat:12,name:"Albu Sorina",email:"sorinutza_cr@yahoo.com"},
+{id:"r5s13",row:5,seat:13,name:"Albu Sorina",email:"sorinutza_cr@yahoo.com"},
+{id:"r5s14",row:5,seat:14,name:"Albu Sorina",email:"sorinutza_cr@yahoo.com"},
+{id:"r5s15",row:5,seat:15,name:"Albu Sorina",email:"sorinutza_cr@yahoo.com"},
+{id:"r5s16",row:5,seat:16,name:"Albu Sorina",email:"sorinutza_cr@yahoo.com"},
+{id:"r5s17",row:5,seat:17,name:"Albu Sorina",email:"sorinutza_cr@yahoo.com"},
+{id:"r5s18",row:5,seat:18,name:"Trandafir Ileana",email:"ileana.trandafir11@yahoo.com"},
+{id:"r5s19",row:5,seat:19,name:"Trandafir Ileana",email:"ileana.trandafir11@yahoo.com"},
+{id:"r5s20",row:5,seat:20,name:"Pana Bianca",email:"biancapana90@gmail.com"},
+{id:"r5s21",row:5,seat:21,name:"Pana Bianca",email:"biancapana90@gmail.com"},
+{id:"r5s22",row:5,seat:22,name:"Irina Paun",email:"irinuka_dulcika@yahoo.com"},
+{id:"r5s23",row:5,seat:23,name:"Irina Paun",email:"irinuka_dulcika@yahoo.com"},
+{id:"r5s24",row:5,seat:24,name:"Pena Marius",email:"penamarius06@gmail.com"},
+{id:"r5s25",row:5,seat:25,name:"Pena Marius",email:"penamarius06@gmail.com"},
+{id:"r6s23",row:6,seat:23,name:"Pena Marius",email:"penamarius06@gmail.com"},
+{id:"r6s22",row:6,seat:22,name:"Enache Lavinia",email:"macesanulavinia@yahoo.comcom"},
+{id:"r6s21",row:6,seat:21,name:"Enache Lavinia",email:"macesanulavinia@yahoo.comcom"},
+{id:"r6s20",row:6,seat:20,name:"Aleca Elena",email:"fetcu.elena25@yahoo.com"},
+{id:"r6s19",row:6,seat:19,name:"Aleca Elena",email:"fetcu.elena25@yahoo.com"},
+{id:"r6s18",row:6,seat:18,name:"Aleca Elena",email:"fetcu.elena25@yahoo.com"},
+{id:"r6s17",row:6,seat:17,name:"Aleca Elena",email:"fetcu.elena25@yahoo.com"},
+{id:"r6s16",row:6,seat:16,name:"Aleca Elena",email:"fetcu.elena25@yahoo.com"},
+{id:"r6s15",row:6,seat:15,name:"Aleca Elena",email:"fetcu.elena25@yahoo.com"},
+{id:"r6s14",row:6,seat:14,name:"BRATAN EVA STEFANIA",email:"greti_marius@yahoo.com"},
+{id:"r6s13",row:6,seat:13,name:"BRATAN EVA STEFANIA",email:"greti_marius@yahoo.com"}
+]
+
+const search=document.getElementById("search")
+const results=document.getElementById("results")
+const output=document.getElementById("output")
+const clearBtn=document.getElementById("clearBtn")
+const wrapper=document.querySelector(".inputWrapper")
+const pinkPage=document.getElementById("pinkPage")
+const seatMap=document.getElementById("seatMap")
+
+const searchableData=data.filter(d=>d.row!==1)
+
+const participants=[...new Set(searchableData.map(d=>`${d.name}|||${(d.email||"").toLowerCase()}`))]
+  .map(entry=>{
+    const [name,email]=entry.split("|||")
+    return {name,email}
+  })
+
+function getSeatSize(){
+
+let rows=[...new Set(data.map(d=>d.row))]
+let maxSeats=0
+
+rows.forEach(r=>{
+let count=data.filter(d=>d.row===r).length
+if(count>maxSeats) maxSeats=count
+})
+
+let containerWidth=Math.min(window.innerWidth-120,900)
+let gap=6
+
+return (containerWidth-(gap*(maxSeats-1)))/maxSeats
+}
+
+function buildSeatMap(activeSeats=[]){
+
+seatMap.innerHTML=""
+
+let seatSize=getSeatSize()
+
+let rows=[...new Set(data.map(d=>d.row))].sort((a,b)=>a-b)
+
+rows.forEach(r=>{
+
+let rowDiv=document.createElement("div")
+rowDiv.className="row"
+
+let label=document.createElement("div")
+label.className="rowLabel"
+label.textContent="R"+r
+
+rowDiv.appendChild(label)
+
+let seatsContainer=document.createElement("div")
+seatsContainer.className="seats"
+
+let seats=data
+  .filter(d=>d.row===r)
+  .sort((a,b)=>a.seat-b.seat)
+
+seats.forEach(s=>{
+
+let sq=document.createElement("div")
+sq.className="square"
+
+sq.style.width=seatSize+"px"
+
+if(activeSeats.includes(s.id)){
+sq.classList.add("active")
+sq.textContent=s.seat
+}
+
+seatsContainer.appendChild(sq)
+
+})
+
+rowDiv.appendChild(seatsContainer)
+seatMap.appendChild(rowDiv)
+
+})
+
+}
+
+buildSeatMap()
+
+window.addEventListener("resize",()=>buildSeatMap())
+
+search.addEventListener("input",()=>{
+
+let val=search.value.trim().toLowerCase()
+
+wrapper.classList.toggle("active",search.value.length>0)
+
+results.innerHTML=""
+
+if(!val){
+results.style.display="none"
+output.style.display="none"
+return
+}
+
+let filtered=participants.filter(p=>
+  p.name.toLowerCase().includes(val) || p.email.includes(val)
+)
+
+if(filtered.length===0){
+results.style.display="none"
+return
+}
+
+results.style.display="block"
+
+filtered.forEach(participant=>{
+
+let div=document.createElement("div")
+div.className="resultItem"
+div.textContent=participant.name
+
+div.onclick=()=>showSeats(participant.name)
+
+results.appendChild(div)
+
+})
+
+})
+
+function showSeats(name){
+
+results.style.display="none"
+
+let seats=searchableData
+  .filter(d=>d.name===name)
+  .sort((a,b)=>a.row-b.row || a.seat-b.seat)
+
+output.style.display="block"
+
+output.innerHTML=
+"<h2>"+name+"</h2>"+
+seats.map(s=>`<span class="seat">Rând ${s.row} (Scaun ${s.seat})</span>`).join("")
+
+buildSeatMap(seats.map(s=>s.id))
+
+}
+
+clearBtn.addEventListener("click",()=>{
+
+search.value=""
+results.innerHTML=""
+results.style.display="none"
+
+output.innerHTML=""
+output.style.display="none"
+
+wrapper.classList.remove("active")
+
+buildSeatMap()
+
+})
+
+/* SWIPE */
+
+let startX=0
+let endX=0
+
+document.addEventListener("touchstart",e=>{
+startX=e.changedTouches[0].screenX
+})
+
+document.addEventListener("touchend",e=>{
+
+endX=e.changedTouches[0].screenX
+let diff=endX-startX
+
+if(diff<-70){
+pinkPage.classList.add("active")
+}
+
+if(diff>70){
+pinkPage.classList.remove("active")
+}
+
+})
+
+</script>
+
+</body>
+</html>
